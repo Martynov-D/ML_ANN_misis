@@ -40,7 +40,7 @@ X, y = make_blobs(n_samples=400, n_features=5, centers=5, cluster_std=0.0001, ra
 # y = iris.target
 
 # setting distance_threshold=0 ensures we compute the full tree.
-model = AgglomerativeClustering(distance_threshold=16, n_clusters=None, affinity='manhattan', linkage='average')
+model = AgglomerativeClustering(distance_threshold=16, n_clusters=None, affinity='euclidean', linkage='average')
 # manhattan euclidean
 model = model.fit(X)
 

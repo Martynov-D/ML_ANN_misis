@@ -1,6 +1,7 @@
 from sklearn.cluster import k_means
 
 from matplotlib import pyplot as plt
+
 from sklearn.datasets import load_iris
 from sklearn.datasets import make_blobs
 

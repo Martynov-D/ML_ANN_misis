@@ -28,34 +28,34 @@ np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
 # Загрузка датасета ирисы и подсчет его матрицы корреляций
 iris = load_iris()
 irisDf = pd.DataFrame(iris.data)
-irisDf.to_csv('iris.csv', index = False, header=True)
+irisDf.to_csv('iris.csv', index=False, header=True)
 irisCorr = irisDf.corr()
 
 # Загрузка датасета рак и подсчет его матрицы корреляций
-cancer = load_breast_cancer()
-cancerDf = pd.DataFrame(cancer.data)
-cancerDf.to_csv('cancer.csv', index = False, header=True)
-cancerCorr = cancerDf.corr()
+# cancer = load_breast_cancer()
+# cancerDf = pd.DataFrame(cancer.data)
+# cancerDf.to_csv('cancer.csv', index = False, header=True)
+# cancerCorr = cancerDf.corr()
 
 # Составление списка со слабой корелляцией
-corrSum = [[i, 0] for i in range(cancerCorr.shape[0])]
+corrSum = [[i, 0] for i in range(irisCorr.shape[0])]
 print("Correlation sum\n{}\n".format(corrSum))
-for i in range(cancerCorr.shape[0]):
-    for j in range(cancerCorr.shape[1]):
-        corrSum[i][1] += abs(cancerCorr[i][j])
+for i in range(irisCorr.shape[0]):
+    for j in range(irisCorr.shape[1]):
+        corrSum[i][1] += abs(irisCorr[i][j])
 
 corrSum.sort(key=lambda x: x[1], reverse=True)
 print("Sorted correlation sum\n{}\n".format(corrSum))
 
 # Рисуем матрицу кореляций
 f1 = plt.figure("Correlation matrix")
-sn.heatmap(cancerCorr, annot=True)
+sn.heatmap(irisCorr, annot=True)
 # plt.matshow(cancerCorr)
 plt.title("Correlation matrix")
 
 # Создание модели и выполнение алгоритма на датасете
 sklearn_pca = PCA(n_components=1)
-sklearn_transf = sklearn_pca.fit_transform(cancerDf)
+sklearn_transf = sklearn_pca.fit_transform(irisDf)
 
 # Получаем значения описываемой дисперсии
 variance = sklearn_pca.explained_variance_ratio_
@@ -90,8 +90,8 @@ plt.ylabel("Variation")
 
 # Факторная нагрузка
 PCAFeatures = pd.DataFrame(sklearn_transf, columns=['PC1'])
-print(cancerDf, '\n', PCAFeatures)
-temp = cancerDf.T.append(PCAFeatures.T)
+print(irisDf, '\n', PCAFeatures)
+temp = irisDf.T.append(PCAFeatures.T)
 print(temp)
 loadingMatrix = temp.T.corr()
 f3 = plt.figure("Factor analysis")
@@ -101,9 +101,9 @@ plt.title("Loading matrix")
 for i in range(1):
     print('PC' + str(i + 1), sum(abs(loadingMatrix['PC' + str(i + 1)][:])) - 1)
 
-# Отображение варианта Scikit-learn
+# # Отображение варианта Scikit-learn
 f4 = plt.figure("Scikit-learn PCA")
-plt.scatter(sklearn_transf, range(len(sklearn_transf)), c=cancer.target)
+plt.scatter(sklearn_transf, range(len(sklearn_transf)), c=iris.target)
 plt.title('Метод главных компонент от Sckit-learn')
 
 plt.show()
